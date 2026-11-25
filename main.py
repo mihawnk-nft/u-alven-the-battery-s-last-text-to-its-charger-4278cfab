@@ -27,6 +27,10 @@ def main() -> None:
     text = ENTRY_TEXT.strip()
     if not text or len(text) > MAX_CHARS:
         raise SystemExit("entry text must be 1-200 characters")
+    # The judge reads one line of plain text: a newline inside the text
+    # would break the "one line" shape, so refuse it rather than ship it.
+    if "\n" in text or "\r" in text:
+        raise SystemExit("entry text must be a single line")
     os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
     # No trailing newline: the file's bytes are the judged text, exactly.
     with open(OUTPUT_PATH, "w", encoding="utf-8", newline="") as f:
